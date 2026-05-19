@@ -485,9 +485,7 @@ Respond JSON only (no markdown):
             {/* Blouse */}
             <path d="M178 222 Q180 248 188 260 Q200 268 210 268 Q220 268 232 260 Q240 248 242 222 Q230 215 210 214 Q190 215 178 222Z" fill="#0e7a60"/>
 
-            {/* Pallu / dupatta over shoulder */}
-            <path d="M242 222 Q258 200 268 175 Q275 155 265 140" fill="none" stroke="#1a9478" strokeWidth="14" strokeLinecap="round"/>
-            <path d="M242 222 Q258 200 268 175 Q275 155 265 140" fill="none" stroke="#d4a017" strokeWidth="2" strokeDasharray="4,4"/>
+            
 
             {/* Neck */}
             <rect x="203" y="200" width="14" height="18" rx="6" fill="#c68642"/>
