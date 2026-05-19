@@ -308,31 +308,42 @@ setImgResult(data);   const d=await res.json(); const t=d.content?.[0]?.text||"{
 
   // PHC Chat
   const sendChat = async () => {
-    const msg=chatInput.trim(); if(!msg||chatLoading) return;
-    setChatMessages(p=>[...p,{role:"user",text:msg}]); setChatInput(""); setChatLoading(true);
-    const history=[...chatMessages,{role:"user",text:msg}];
-    try {
-      const res = await fetch("/api/claude", {
-  method: "POST",
-  headers: { "Content-Type": "application/json" },
-  body: JSON.stringify({
-    message: msg
-  })
-});
+  const msg = chatInput.trim();
+  if (!msg || chatLoading) return;
 
-const d = await res.json();
+  setChatMessages(p => [...p, { role: "user", text: msg }]);
+  setChatInput("");
+  setChatLoading(true);
 
-setChatMessages(prev => [
-  ...prev,
-  { role: "assistant", text: d.explanation || "No response" }
-]);
+  try {
+    const res = await fetch("/api/claude", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        message: msg
+      })
+    });
 
-speak(d.explanation || "", lang);
-      const d=await res.json(); const reply=d.content?.[0]?.text||"Maafi, thodi der baad try karein.";
-      setChatMessages(p=>[...p,{role:"assistant",text:reply}]); speak(reply,lang);
-    } catch { setChatMessages(p=>[...p,{role:"assistant",text:"Network error. Please try again."}]); }
-    setChatLoading(false);
-  };
+    const data = await res.json();
+
+    const reply = data?.explanation || "No response";
+
+    setChatMessages(prev => [
+      ...prev,
+      { role: "assistant", text: reply }
+    ]);
+
+    speak(reply, lang);
+
+  } catch (err) {
+    setChatMessages(prev => [
+      ...prev,
+      { role: "assistant", text: "Network error. Please try again." }
+    ]);
+  }
+
+  setChatLoading(false);
+};
 
   // Pregnancy analyse
   const analysePregWith = async () => {
@@ -365,61 +376,118 @@ Respond JSON only (no markdown):
 
   // ASHA Help / Copilot
   const sendHelp = async (msg) => {
-    const m = (msg||helpInput).trim(); if(!m||helpLoading) return;
-    setHelpMessages(p=>[...p,{role:"user",text:m}]); setHelpInput(""); setHelpLoading(true);
-    const history=[...helpMessages,{role:"user",text:m}];
-    try {
-      const res = await fetch("/api/claude", {
-  method: "POST",
-  headers: { "Content-Type": "application/json" },
-  body: JSON.stringify({ message: m })
-});
+  const m = (msg || helpInput).trim();
+  if (!m || helpLoading) return;
 
-const d = await res.json();
+  setHelpMessages(p => [...p, { role: "user", text: m }]);
+  setHelpInput("");
+  setHelpLoading(true);
 
-setHelpMessages(prev => [
-  ...prev,
-  { role: "assistant", text: d.explanation || "Try again" }
-]);
+  try {
+    const res = await fetch("/api/claude", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        message: m
+      })
+    });
 
-speak(d.explanation || "", lang);
-      const d=await res.json(); const reply=d.content?.[0]?.text||"Khed hai, abhi jawab dene mein mushkil aa rahi hai.";
-      setHelpMessages(p=>[...p,{role:"assistant",text:reply}]); speak(reply,lang);
-    } catch { setHelpMessages(p=>[...p,{role:"assistant",text:"Network error. Please try again."}]); }
-    setHelpLoading(false);
-  };
+    const data = await res.json();
+
+    const reply = data?.explanation || "Try again";
+
+    setHelpMessages(prev => [
+      ...prev,
+      { role: "assistant", text: reply }
+    ]);
+
+    speak(reply, lang);
+
+  } catch (err) {
+    setHelpMessages(prev => [
+      ...prev,
+      { role: "assistant", text: "Network error. Please try again." }
+    ]);
+  }
+
+  setHelpLoading(false);
+};
 
   // Main triage
-  const analyzeWithClaude = async () => {
-    setLoading(true);
-    const symptomList=selectedSymptoms.map(id=>SYMPTOMS.find(s=>s.id===id)?.en).join(", ");
-    try {
-      const res = await fetch("/api/claude", {
-  method: "POST",
-  headers: { "Content-Type": "application/json" },
-  body: JSON.stringify({
-    message: `
-Age:${patient.age}
-Sex:${patient.sex}
-Symptoms:${selectedSymptoms.join(",")}
-SpO2:${vitals.spo2}
-Temp:${vitals.temp}
-`
-  })
-});
+const analyzeWithClaude = async () => {
+  setLoading(true);
 
-const data = await res.json();
+  const symptomList = selectedSymptoms
+    .map(id => SYMPTOMS.find(s => s.id === id)?.en)
+    .join(", ");
 
-setResult(data);
-setStep(3);
-speakResult(data);
-        const d=await res.json(); const parsed=JSON.parse((d.content?.[0]?.text||"{}").replace(/```json|```/g,"").trim());
-      setResult(parsed); setStep(3); speakResult(parsed);
-      setCases(p=>[{id:p.length+1,name:patient.name||"Unknown",age:parseInt(patient.age),sex:patient.sex,village:patient.village,asha:patient.asha,symptoms:selectedSymptoms,spo2:vitals.spo2?parseFloat(vitals.spo2):98,temp:vitals.temp?parseFloat(vitals.temp):98.6,level:parsed.level,condition:parsed.condition,time:new Date().toLocaleTimeString("en-IN",{hour:"2-digit",minute:"2-digit"}),resolved:false},...p]);
-    } catch { setResult({level:"YELLOW",condition:"Unable to analyze",confidence:0,first_aid:["Check vitals","Contact PHC doctor","Monitor closely"],call_108:false,extra_symptom:"any worsening"}); setStep(3); }
-    setLoading(false);
-  };
+  try {
+    const res = await fetch("/api/claude", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        message: `
+Age: ${patient.age}
+Sex: ${patient.sex}
+Symptoms: ${symptomList || "None reported"}
+SpO2: ${vitals.spo2}
+Temp: ${vitals.temp}
+        `
+      })
+    });
 
+    const data = await res.json();
+
+    const level = data?.triage || data?.level || "PHC";
+    const condition =
+      data?.diagnosis?.[0] ||
+      data?.condition ||
+      data?.explanation ||
+      "Unknown condition";
+
+    setResult(data);
+    setStep(3);
+    speakResult(data);
+
+    setCases(p => [
+      {
+        id: p.length + 1,
+        name: patient.name || "Unknown",
+        age: parseInt(patient.age) || 0,
+        sex: patient.sex,
+        village: patient.village,
+        asha: patient.asha,
+        symptoms: selectedSymptoms,
+        spo2: vitals.spo2 ? parseFloat(vitals.spo2) : 98,
+        temp: vitals.temp ? parseFloat(vitals.temp) : 98.6,
+        level,
+        condition,
+        time: new Date().toLocaleTimeString("en-IN", {
+          hour: "2-digit",
+          minute: "2-digit"
+        }),
+        resolved: false
+      },
+      ...p
+    ]);
+
+  } catch (err) {
+    setResult({
+      triage: "PHC",
+      diagnosis: ["Unable to analyze"],
+      steps: ["Check vitals", "Contact PHC doctor"],
+      red_flags: [],
+      confidence: 0,
+      explanation: "Network or server error"
+    });
+
+    setStep(3);
+  }
+
+  setLoading(false);
+};
+  
+      
   const useMockResult = () => {
     const mock={level:"RED",condition:"Suspected Cardiac Event",confidence:85,first_aid:["Lay flat, loosen clothes","Do not give food or water","Keep patient calm and still"],call_108:true,extra_symptom:"jaw pain or numbness"};
     setResult(mock); setStep(3); speakResult(mock);
