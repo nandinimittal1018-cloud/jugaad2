@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from "react";
-
+const API = import.meta.env.VITE_API_URL;
 const CLAUDE_MODEL = "claude-sonnet-4-20250514";
 
 const LANG = {
@@ -291,7 +291,7 @@ export default function App() {
     try {
       const base64 = imgPreview.split(",")[1];
       const mediaType = imgFile?.type || "image/jpeg";
-      const res = await fetch("/api/claude", {
+      const res = await fetch(`${API}/api/claude`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ message: "Analyze this medical skin image for rural India triage", image: base64, mediaType }),
@@ -320,7 +320,7 @@ export default function App() {
     setChatInput("");
     setChatLoading(true);
     try {
-      const res = await fetch("/api/claude", { method:"POST", headers:{"Content-Type":"application/json"}, body:JSON.stringify({ message:msg }) });
+      const res = await fetch(`${API}/api/claude`, { method:"POST", headers:{"Content-Type":"application/json"}, body:JSON.stringify({ message:msg }) });
       const data = await res.json();
       const reply = data?.explanation || "No response";
       setChatMessages(prev => [...prev, { role:"assistant", text:reply }]);
@@ -336,7 +336,7 @@ export default function App() {
     const bpStr = pregBP.systolic&&pregBP.diastolic ? `BP: ${pregBP.systolic}/${pregBP.diastolic} mmHg` : "";
     setPregLoading(true);
     try {
-      const res=await fetch("/api/claude",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({messages:[{role:"user",content:`You are a maternal health triage assistant for rural India ASHA workers. Patient:
+      const res = await fetch(`${API}/api/claude`, {method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({messages:[{role:"user",content:`You are a maternal health triage assistant for rural India ASHA workers. Patient:
 Name: ${pregPatient.name||"Unknown"}, Age: ${pregPatient.age}, Weeks Pregnant: ${pregPatient.weeks||"Unknown"}, Previous Deliveries: ${pregPatient.parity}
 ${bpStr}
 Symptoms: ${symptomList||"None reported"}
@@ -366,7 +366,7 @@ Respond JSON only (no markdown):
     setHelpInput("");
     setHelpLoading(true);
     try {
-      const res = await fetch("/api/claude", { method:"POST", headers:{"Content-Type":"application/json"}, body:JSON.stringify({ message:m }) });
+      const res = await fetch(`${API}/api/claude`, {method:"POST", headers:{"Content-Type":"application/json"}, body:JSON.stringify({ message:m }) });
       const data = await res.json();
       const reply = data?.explanation || "Try again";
       setHelpMessages(prev => [...prev, { role:"assistant", text:reply }]);
