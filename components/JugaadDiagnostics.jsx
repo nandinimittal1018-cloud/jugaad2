@@ -613,10 +613,10 @@ Respond JSON only (no markdown):
           <button style={S.navBtn(true)}>{T("phcView")}</button>
           <button style={S.pinkBtn(false)} onClick={()=>{setView("pregnancy");resetPreg();}}>🤰 {T("pregnancyBtn")}</button>
           <button style={S.helpNavBtn(false)} onClick={()=>setView("help")}>💡 {T("helpBtn")}</button>
-          <div style={{display:"flex",gap:3}}>{["hi","en","mr"].map(l=><button key={l} style={S.langBtn(lang===l)} onClick={()=>setLang(l)}>{l==="hi"?"हि":l==="mr"?"मर":"EN"}</button>)}</div>
+          <div style={{display:"flex",gap:1}}>{["hi","en","mr"].map(l=><button key={l} style={S.langBtn(lang===l)} onClick={()=>setLang(l)}>{l==="hi"?"हि":l==="mr"?"मर":"EN"}</button>)}</div>
         </div>
       </div>
-      <div style={{maxWidth:800,margin:"0 auto",padding:"18px 14px"}}>
+      <div style={{maxWidth:1000,margin:"0 auto",padding:"18px 14px"}}>
         {outbreakVillages.length>0&&<div style={{background:"#fff7e6",border:"2px solid #fa8c16",borderRadius:10,padding:"12px 16px",marginBottom:14,display:"flex",gap:10,alignItems:"center"}}><span>⚠️</span><div><div style={{fontWeight:700,color:"#873800",fontSize:14}}>{T("outbreakAlert")}</div><div style={{fontSize:13,color:"#874d00"}}>{T("outbreakMsg")}: <strong>{outbreakVillages.join(", ")}</strong> {T("possibleCluster")}</div></div></div>}
         <div style={{display:"grid",gridTemplateColumns:"1fr 1fr 1fr 1fr",gap:10,marginBottom:18}}>
           {[{label:"Emergency",value:redCases,...levelColor("RED")},{label:"Refer to PHC",value:yellowCases,...levelColor("YELLOW")},{label:"Treated Locally",value:greenCases,...levelColor("GREEN")},{label:"Total Today",value:cases.length,bg:"#f0f4ff",border:"#597ef7",text:"#1d39c4"}].map((m,i)=>(
