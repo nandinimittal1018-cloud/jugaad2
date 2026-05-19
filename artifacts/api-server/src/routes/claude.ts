@@ -1,7 +1,16 @@
 import { Router } from "express";
 import Anthropic from "@anthropic-ai/sdk";
+import rateLimit from "express-rate-limit";
 
 const router = Router();
+
+const claudeRateLimit = rateLimit({
+  windowMs: 60 * 1000,
+  max: 30,
+  standardHeaders: true,
+  legacyHeaders: false,
+  message: { error: "Too many requests. Please wait a moment and try again." },
+});
 
 const anthropic = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
 
@@ -28,7 +37,7 @@ async function callClaude({ messages, system, max_tokens = 1024 }: {
   return block && block.type === "text" ? block.text : "";
 }
 
-router.post("/claude", async (req, res) => {
+router.post("/claude", claudeRateLimit, async (req, res) => {
   try {
     const { messages, system, max_tokens, message, image, mediaType } = req.body;
 
