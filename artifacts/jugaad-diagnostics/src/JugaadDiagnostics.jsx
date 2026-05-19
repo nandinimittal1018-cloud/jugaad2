@@ -587,7 +587,17 @@ Respond JSON only (no markdown):
   );
 
   if (view==="phc") return (
-    <div style={S.app}>
+    <div
+  style={{
+    ...S.app,
+    backgroundImage:
+      `linear-gradient(rgba(255,255,255,0.82), rgba(255,255,255,0.82)), url("/bg.png")`,
+    backgroundSize: "cover",
+    backgroundPosition: "center",
+    backgroundAttachment: "fixed",
+    minHeight: "100vh"
+  }}
+>
       <div style={S.topBar}>
         <div><div style={S.topTitle}>PHC Dashboard</div><div style={S.topSub}>Dr. Meena Singh · Barmer Block</div></div>
         <div style={{display:"flex",gap:5,alignItems:"center",flexWrap:"wrap"}}>
@@ -634,7 +644,17 @@ Respond JSON only (no markdown):
   );
 
   if (view==="pregnancy") return (
-    <div style={S.app}>
+    <div
+  style={{
+    ...S.app,
+    backgroundImage:
+      `linear-gradient(rgba(255,255,255,0.82), rgba(255,255,255,0.82)), url("/bg.png")`,
+    backgroundSize: "cover",
+    backgroundPosition: "center",
+    backgroundAttachment: "fixed",
+    minHeight: "100vh"
+  }}
+>
       <div style={S.topBar}>
         <div><div style={S.topTitle}>🤰 {T("pregTitle")}</div><div style={S.topSub}>{T("pregSub")}</div></div>
         <div style={{display:"flex",gap:5,alignItems:"center",flexWrap:"wrap"}}>
@@ -766,7 +786,17 @@ Respond JSON only (no markdown):
   );
 
   if (view==="help") return (
-    <div style={S.app}>
+    <div
+  style={{
+    ...S.app,
+    backgroundImage:
+      `linear-gradient(rgba(255,255,255,0.82), rgba(255,255,255,0.82)), url("/bg.png")`,
+    backgroundSize: "cover",
+    backgroundPosition: "center",
+    backgroundAttachment: "fixed",
+    minHeight: "100vh"
+  }}
+>
       <div style={S.topBar}>
         <div><div style={S.topTitle}>💡 {T("helpTitle")}</div><div style={S.topSub}>{T("helpSub")}</div></div>
         <div style={{display:"flex",gap:5,alignItems:"center",flexWrap:"wrap"}}>
@@ -815,7 +845,17 @@ Respond JSON only (no markdown):
   );
 
   return (
-    <div style={S.app}>
+    <div
+  style={{
+    ...S.app,
+    backgroundImage:
+      `linear-gradient(rgba(255,255,255,0.82), rgba(255,255,255,0.82)), url("/bg.png")`,
+    backgroundSize: "cover",
+    backgroundPosition: "center",
+    backgroundAttachment: "fixed",
+    minHeight: "100vh"
+  }}
+>
       <div style={S.topBar}>
         <div><div style={S.topTitle}>Jugaad Diagnostics</div><div style={S.topSub}>जुगाड़ डायग्नोस्टिक्स · {T("appSub")}</div></div>
         <div style={{display:"flex",gap:5,alignItems:"center",flexWrap:"wrap"}}>
