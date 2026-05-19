@@ -282,29 +282,65 @@ export default function App() {
   };
 
   // Image analysis
-  const handleImageUpload = e => {
-    const f=e.target.files[0]; if(!f) return; setImgFile(f); setImgResult(null);
-    const r=new FileReader(); r.onload=ev=>setImgPreview(ev.target.result); r.readAsDataURL(f);
-  };
   const analyseImage = async () => {
-    if(!imgPreview) return; setImgLoading(true);
-    const base64=imgPreview.split(",")[1]; const mt=imgFile?.type||"image/jpeg";
-    try {
-    const res = await fetch("/api/claude", {
-  method: "POST",
-  headers: { "Content-Type": "application/json" },
-  body: JSON.stringify({
-    message: "Analyse this skin image for rural India triage",
-    image: base64
-  })
-});
+  if (!imgPreview) return;
 
-const data = await res.json();
-setImgResult(data);   const d=await res.json(); const t=d.content?.[0]?.text||"{}"; const p=JSON.parse(t.replace(/```json|```/g,"").trim());
-      setImgResult(p); if(p.condition!=="Not a skin condition") speak(`${p.condition}. ${p.description}`,lang);
-    } catch { setImgResult({condition:"Analysis failed",severity:"MILD",description:"Could not analyse. Try again.",action:"visit_phc",home_care:[],refer_note:""}); }
-    setImgLoading(false);
-  };
+  setImgLoading(true);
+  setImgResult(null);
+
+  try {
+    const base64 = imgPreview.split(",")[1];
+    const mediaType = imgFile?.type || "image/jpeg";
+
+    const res = await fetch("/api/claude", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        message: "Analyze this medical skin image for rural India triage",
+        image: base64,
+        mediaType, // optional safety field (ignored if backend doesn't use it)
+      }),
+    });
+
+    const data = await res.json();
+
+    // SAFETY NORMALIZATION (IMPORTANT)
+    const result = {
+      triage: data?.triage || "PHC",
+      diagnosis: data?.diagnosis || ["Unable to detect condition"],
+      steps: data?.steps || ["Consult PHC doctor"],
+      red_flags: data?.red_flags || [],
+      confidence: data?.confidence || 0,
+      explanation: data?.explanation || "No explanation available",
+    };
+
+    setImgResult(result);
+
+    // Speak safely
+    const speechText =
+      result.diagnosis?.[0] ||
+      result.explanation ||
+      "Image analysis complete";
+
+    speak(speechText, lang);
+
+  } catch (err) {
+    setImgResult({
+      triage: "PHC",
+      diagnosis: ["Image analysis failed"],
+      steps: ["Retake image", "Ensure good lighting", "Try again"],
+      red_flags: [],
+      confidence: 0,
+      explanation: "Network or processing error",
+    });
+  }
+
+  setImgLoading(false);
+};
+
+
 
   // PHC Chat
   const sendChat = async () => {
