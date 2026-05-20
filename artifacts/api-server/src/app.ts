@@ -6,9 +6,8 @@ import { logger } from "./lib/logger";
 
 const app: Express = express();
 
-// ✅ CORRECT: use pinoHttp directly (NO wrapper, NO extra call)
 app.use(
-  pinoHttp({
+  (pinoHttp as any)({
     logger,
     serializers: {
       req(req: Request) {
