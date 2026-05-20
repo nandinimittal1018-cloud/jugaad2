@@ -876,7 +876,7 @@ Respond JSON only (no markdown):
                 {i<1&&<div style={{flex:1,height:2,background:step>1?"#1a472a":"#ddd",margin:"0 8px"}}/>}
               </div>
             ))}
-            <div style={{marginLeft:8,fontSize:12,color:"#666"}}>{step===1?T("newPatient"):T("selectSymptoms")}</div>
+            <div style={{marginLeft:8,fontSize:13,fontWeight:800,color:"#111"}}>{step===1?T("newPatient"):T("selectSymptoms")}</div>
           </div>
         )}
         {step===1&&(
