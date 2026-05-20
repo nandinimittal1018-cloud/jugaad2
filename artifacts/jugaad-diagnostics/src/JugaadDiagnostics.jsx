@@ -675,7 +675,19 @@ Respond JSON only (no markdown):
                 {i<1&&<div style={{flex:1,height:2,background:pregStep>1?"#880e4f":"#ddd",margin:"0 8px"}}/>}
               </div>
             ))}
-            <div style={{marginLeft:8,fontSize:12,color:"#666"}}>{pregStep===1?"माँ की जानकारी":"लक्षण जाँचें"}</div>
+            <div style={{marginLeft:8,fontSize:15,fontWeight:800,color:"#111"}}>
+  {pregStep===1
+    ? (lang==="en"
+        ? "Mother's Information"
+        : lang==="mr"
+        ? "माँ री जानकारी"
+        : "माँ की जानकारी")
+    : (lang==="en"
+        ? "Check Symptoms"
+        : lang==="mr"
+        ? "लक्षण देखो"
+        : "लक्षण जाँचें")}
+</div>
           </div>
         )}
         {pregStep===1&&(
