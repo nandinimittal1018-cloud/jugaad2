@@ -591,7 +591,7 @@ Respond JSON only (no markdown):
   style={{
     ...S.app,
     backgroundImage:
-      `linear-gradient(rgba(255,255,255,0.82), rgba(255,255,255,0.82)), url("/bg.png")`,
+      `linear-gradient(rgba(255,255,255,0.3), rgba(255,255,255,0.3)), url("/bg.png")`,
     backgroundSize: "cover",
     backgroundPosition: "center",
     backgroundAttachment: "fixed",
@@ -648,7 +648,7 @@ Respond JSON only (no markdown):
   style={{
     ...S.app,
     backgroundImage:
-      `linear-gradient(rgba(255,255,255,0.82), rgba(255,255,255,0.82)), url("/bg.png")`,
+      `linear-gradient(rgba(255,255,255,0.3), rgba(255,255,255,0.3)), url("/bg.png")`,
     backgroundSize: "cover",
     backgroundPosition: "center",
     backgroundAttachment: "fixed",
@@ -790,7 +790,7 @@ Respond JSON only (no markdown):
   style={{
     ...S.app,
     backgroundImage:
-      `linear-gradient(rgba(255,255,255,0.82), rgba(255,255,255,0.82)), url("/bg.png")`,
+      `linear-gradient(rgba(255,255,255,0.3), rgba(255,255,255,0.3)), url("/bg.png")`,
     backgroundSize: "cover",
     backgroundPosition: "center",
     backgroundAttachment: "fixed",
@@ -849,7 +849,7 @@ Respond JSON only (no markdown):
   style={{
     ...S.app,
     backgroundImage:
-      `linear-gradient(rgba(255,255,255,0.82), rgba(255,255,255,0.82)), url("/bg.png")`,
+      `linear-gradient(rgba(255,255,255,0.3), rgba(255,255,255,0.3)), url("/bg.png")`,
     backgroundSize: "cover",
     backgroundPosition: "center",
     backgroundAttachment: "fixed",
